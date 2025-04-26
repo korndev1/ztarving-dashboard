@@ -1,0 +1,10 @@
+{
+    "login": "Login",
+    "welcome": "Welcome to our website!",
+    "register":"Create Account",
+    "username_empty":"Username is Empty",
+    "username_empty_desc":"Please enter Username for login",
+    "password_empty":"Password is Empty",
+    "password_empty_desc":"Please enter Password for login"
+  }
+  
