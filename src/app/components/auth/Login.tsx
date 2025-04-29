@@ -8,6 +8,7 @@ import { useState } from "react";
 import { authService, loginAdmin } from "@/lib/services/authService";
 import Loading from "../Loading";
 import Modal from "../Modal";
+import { ACCESS_TOKEN } from "@/Constant/localStorage";
 
 export default function LoginClient() {
   const { t } = useTranslation();
@@ -28,11 +29,21 @@ export default function LoginClient() {
       };
       const response = await authService.loginAdmin(body);
 
-      if (response.status == 200) {
+      if (response.statusCode == 200) {
+        const token = response.access_token
+        localStorage.setItem(ACCESS_TOKEN,token)
+
         setTimeout(() => {
           router.push("/users");
-          // setLoading(false)
+          setLoading(false)          
+
         }, 1500);
+      } else if(response.statusCode == 403) {
+        setError(true)
+        setLoading(false)
+      }else if(response.statusCode == 400) {
+        setError(true)
+        setLoading(false)
       }
     } catch (err: any) {
       console.error("fetch user error", err);

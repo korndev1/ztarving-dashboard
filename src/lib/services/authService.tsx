@@ -1,4 +1,4 @@
-import { responseApi } from "@/type";
+import { responseApi, responseLoginApi } from "@/type";
 
 export interface SignUp {
   password: string;
@@ -6,7 +6,7 @@ export interface SignUp {
 }
 
 export const authService = {
-  loginAdmin: async (body: SignUp): Promise<responseApi> => {
+  loginAdmin: async (body: SignUp): Promise<responseLoginApi> => {
     const res = await fetch("http://localhost:3333/auth/login/admin", {
       method: "POST",
       headers: {

@@ -7,12 +7,15 @@ import ChangeLanguage from "../ChangeLanguage";
 import { Colors } from "@/Constant/Colors";
 import { authService } from "@/lib/services/authService";
 import { useRouter } from "next/navigation";
+import Modal from "../Modal";
 
 export default function RegisterClient() {
   const { t } = useTranslation();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [error400, setError400] = useState(false);
+  const [error401, setError401] = useState(false);
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -25,23 +28,25 @@ export default function RegisterClient() {
         password,
       };
       console.log(body);
-      
+
       const response = await authService.registerAdmin(body);
 
-      if (response.status == 200) {
+      if (response.statusCode == 200) {
         setTimeout(() => {
           router.push("/login");
         }, 1500);
       } 
     } catch (err: any) {
       console.error("fetch user error", err.statusCode);
-      if(err.statusCode == 400) {
-        //handle error empty request
-      } else if(err.statusCode == 401){
-        //handle error already username
-      }
       setLoading(false);
-      setError(true);
+
+      if (err.statusCode == 400) {
+        setError400(true);
+      } else if (err.statusCode == 401 || err.statusCode == 403) {
+        setError401(true);
+      } else {
+        setError(true);
+      }
     }
   };
 
@@ -86,6 +91,60 @@ export default function RegisterClient() {
       >
         {t("register")}
       </button>
+      <Modal isOpen={error} onClose={() => setError(false)}>
+        <h2 className="text-xl font-bold mb-4 text-red-500">
+          {"Something went wrong"}
+        </h2>
+        <p className="mb-4 text-red-500">{"Please Do it again"}</p>
+        <button
+          style={{ backgroundColor: Colors.primary }}
+          onClick={() => {
+            setError(false);
+            setUserName("");
+            setPassword("");
+          }}
+          className="text-white px-4 py-2 rounded"
+        >
+          Close
+        </button>
+      </Modal>
+      <Modal isOpen={error400} onClose={() => setError400(false)}>
+        <h2 className="text-xl font-bold mb-4 text-red-500">
+          {userName === "" &&
+            password === "" &&
+            "Username and Password is Empty"}
+          {userName === "" && password !== "" && t("username_empty")}
+          {password == "" && userName !== "" && t("password_empty")}
+        </h2>
+        <p className="mb-4 text-red-500">
+          {userName === "" &&
+            password === "" &&
+            "Please input username and password"}
+          {userName === "" && password !== "" && t("username_empty_desc2")}
+          {password == "" && userName !== "" && t("password_empty_desc2")}
+        </p>
+        <button
+          style={{ backgroundColor: Colors.primary }}
+          onClick={() => setError400(false)}
+          className="text-white px-4 py-2 rounded"
+        >
+          Close
+        </button>
+      </Modal>
+      <Modal isOpen={error401} onClose={() => setError401(false)}>
+        <h2 className="text-xl font-bold mb-4 text-red-500">{t("error401")}</h2>
+        <p className="mb-4 text-red-500">{t("error401_desc")}</p>
+        <button
+          style={{ backgroundColor: Colors.primary }}
+          onClick={() => {
+            setError401(false)
+            setUserName("")
+          }}
+          className="text-white px-4 py-2 rounded"
+        >
+          Close
+        </button>
+      </Modal>
     </div>
   );
 }

@@ -1,6 +1,12 @@
 export interface responseApi {
-    status:number,
+    statusCode:number,
     message:string
+}
+
+export interface responseLoginApi {
+    statusCode:number,
+    message:string,
+    access_token:string
 }
 
 export interface errorResponse {

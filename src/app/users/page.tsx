@@ -1,20 +1,31 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { getUsers, User } from "../../lib/services/userService";
+import { useRouter } from "next/navigation";
+import { ACCESS_TOKEN } from "@/Constant/localStorage";
 
 export const dynamic = "force-dynamic"; // ensure fresh data
 
 const UsersPage = () => {
+  const router = useRouter();
+
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-
-
   useEffect(() => {
-    fetchUsers();
-  }, [users]);
+    const checkLogin = async () => {
+      const token = localStorage.getItem(ACCESS_TOKEN);      
+      if (!token) {
+        router.push("/login"); 
+      } else {
+        fetchUsers();
+      }
 
+    };
+
+    checkLogin();
+  }, [router]);
   const fetchUsers = async () => {
     try {
       const response = await getUsers();
