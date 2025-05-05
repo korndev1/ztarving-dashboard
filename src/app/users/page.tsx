@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getUsers, User } from "../../lib/services/userService";
 import { useRouter } from "next/navigation";
 import { ACCESS_TOKEN } from "@/Constant/localStorage";
+import Navbar from "../components/Navbar";
 
 export const dynamic = "force-dynamic"; // ensure fresh data
 
@@ -26,6 +27,7 @@ const UsersPage = () => {
 
     checkLogin();
   }, [router]);
+  
   const fetchUsers = async () => {
     try {
       const response = await getUsers();
@@ -47,6 +49,7 @@ const UsersPage = () => {
 
   return (
     <div>
+      <Navbar/>
       <h1 className="text-2xl font-bold mb-4">Users Dashboard</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-orangeCustom border">
