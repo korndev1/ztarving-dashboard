@@ -9,6 +9,11 @@
     "password_empty_desc":"Please enter Password for login",
     "password_empty_desc2":"Please enter Password for Create Account",
     "error401":"Username is Taken",
-    "error401_desc":"Plese change Your Username because your username is taken!"
+    "error401_desc":"Plese change Your Username because your username is taken!",
+    "measure_name":"Measure Name",
+    "short_form":"Short Form",
+    "add":"Add",
+    "edit":"Edit",
+    "delete":"Delete"
   }
   
